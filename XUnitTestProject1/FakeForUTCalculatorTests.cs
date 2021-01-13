@@ -10,7 +10,8 @@ namespace XUnitTestProject1
 {
     public class FakeForUTCalculatorTests
     {
-        ICalculator fake = new FakeForUTCalculator();
+        //ICalculator fake = new FakeForUTCalculator();
+        ICalculator fake = new RecursiveCaculator();
 
         private bool AreTwoArrayEqual(List<long> expected, List<long> actual)
         {
