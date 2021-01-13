@@ -6,7 +6,22 @@
         xmlns:local="clr-namespace:WhichSum"
         mc:Ignorable="d"
         Title="子序列和计算器" Height="450" Width="800">
-    <Grid>
 
-    </Grid>
+    <DockPanel>
+        <TextBox x:Name="txtNums"  AcceptsReturn="True" Width="200" DockPanel.Dock="Left"></TextBox>
+        <Grid Height="auto" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label >输入和:</Label>
+            <TextBox x:Name="txtSum" Grid.Column="1"></TextBox>
+            <Button x:Name="btnCalc" Grid.Column="2" Click="btnCalc_Click">计算</Button>
+        </Grid>
+
+        <TextBox x:Name="txtResults" DockPanel.Dock="Top" MinHeight="400"></TextBox>
+        <TextBox x:Name="txtMsg" DockPanel.Dock="Top" Height="30"></TextBox>
+    </DockPanel>
+
 </Window>
