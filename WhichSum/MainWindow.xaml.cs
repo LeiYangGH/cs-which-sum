@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WhichSum
 {
@@ -35,23 +36,51 @@ namespace WhichSum
             return regNums.Matches(txt).Select(x => Convert.ToInt64(x.Value)).ToList();
         }
 
+        private void AllowUIToUpdate()
+        {
+            try
+            {
+                DispatcherFrame frame = new DispatcherFrame();
+                Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+                {
+                    frame.Continue = false;
+                    return null;
+                }), null);
+
+                Dispatcher.PushFrame(frame);
+                //EDIT:
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                              new Action(delegate { }));
+            }
+            catch (Exception)
+            {
+
+
+            }
+
+        }
+
         private void btnCalc_Click(object sender, RoutedEventArgs e)
         {
             txtResults.Text = "";
             try
             {
                 List<long> nums = ExtractNumbersFromTxt(this.txtNums.Text);
-                if (nums.Count() > 5)
-                {
-                    txtMsg.Text = "测试版最多支持5个数";
-                    return;
-                }
+                //if (nums.Count() > 5)
+                //{
+                //    txtMsg.Text = "测试版最多支持5个数";
+                //    return;
+                //}
                 long sum = Convert.ToInt64(this.txtSum.Text.Trim());
+                txtMsg.Text = "计算中...";
+                AllowUIToUpdate();
                 foreach (List<long> arr in calculator.Calculate(nums, sum))
                 {
                     txtResults.Text += string.Join('\t', arr);
                     txtResults.Text += Environment.NewLine;
+                    AllowUIToUpdate();
                 }
+                txtMsg.Text = "计算完成!";
             }
             catch (Exception ex)
             {
